@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WIPS - WiFi Indoor Positioning System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-icon">📡</div>
+      <div>
+        <h1>WIPS: WiFi Indoor Positioning System</h1>
+        <p class="subtitle">Stanford CS229 Reproduction & Multi-Building Benchmark</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="status-badge live">● System Online</span>
+      <span class="status-badge model-tag">PyTorch DNN / WKNN</span>
+    </div>
+  </header>
+
+  <main class="dashboard-grid">
+    <!-- Left Panel: Controls & Telemetry -->
+    <section class="panel control-panel">
+      <h2>Live Localization Query</h2>
+      <p class="panel-desc">Select a test fingerprint observation or simulate a live mobile device scan.</p>
+      
+      <div class="form-group">
+        <label for="sampleSelect">Select Test Fingerprint Sample:</label>
+        <select id="sampleSelect" class="form-control"></select>
+      </div>
+
+      <div class="telemetry-card">
+        <h3>Ground Truth Location</h3>
+        <div class="metric-row">
+          <span>Building:</span>
+          <strong id="gtBuilding">Building 1</strong>
+        </div>
+        <div class="metric-row">
+          <span>Floor:</span>
+          <strong id="gtFloor">Floor 1</strong>
+        </div>
+        <div class="metric-row">
+          <span>Coordinates:</span>
+          <strong id="gtCoords">(45.2m, 28.6m)</strong>
+        </div>
+      </div>
+
+      <div class="telemetry-card highlight">
+        <h3>WIPS Predicted Location</h3>
+        <div class="metric-row">
+          <span>Predicted Building:</span>
+          <strong id="predBuilding" class="text-success">Building 1 (100% Match)</strong>
+        </div>
+        <div class="metric-row">
+          <span>Predicted Floor:</span>
+          <strong id="predFloor" class="text-success">Floor 1 (100% Match)</strong>
+        </div>
+        <div class="metric-row">
+          <span>Estimated (X, Y):</span>
+          <strong id="predCoords">(46.1m, 29.4m)</strong>
+        </div>
+        <div class="metric-row error-metric">
+          <span>Positioning Error:</span>
+          <strong id="posError" class="text-accent">1.22 meters</strong>
+        </div>
+      </div>
+
+      <div class="telemetry-card">
+        <h3>Audible Access Points (RSSI)</h3>
+        <div id="rssiList" class="rssi-bars">
+          <!-- Dynamic RSSI Bars -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Center Panel: Interactive 2D Floor Plan Canvas -->
+    <section class="panel map-panel">
+      <div class="map-header">
+        <div>
+          <h2>2D Floor Plan & Heatmap</h2>
+          <span id="mapSubtitle">Building 1 - Science & Library Complex (Floor 1)</span>
+        </div>
+        <div class="map-controls">
+          <label>Filter Building:</label>
+          <select id="buildingFilter" class="form-control-sm">
+            <option value="0">Building 0 (Engineering)</option>
+            <option value="1" selected>Building 1 (Science/Library)</option>
+            <option value="2">Building 2 (Innovation Center)</option>
+          </select>
+          <label>Floor:</label>
+          <select id="floorFilter" class="form-control-sm">
+            <option value="0">Floor 0</option>
+            <option value="1" selected>Floor 1</option>
+            <option value="2">Floor 2</option>
+            <option value="3">Floor 3</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="canvas-container">
+        <canvas id="floorCanvas" width="700" height="480"></canvas>
+      </div>
+
+      <div class="map-legend">
+        <div class="legend-item"><span class="legend-color ap-marker">▲</span> WiFi Access Point</div>
+        <div class="legend-item"><span class="legend-color gt-marker">●</span> Ground Truth Position</div>
+        <div class="legend-item"><span class="legend-color pred-marker">✕</span> Predicted Location</div>
+        <div class="legend-item"><span class="legend-color error-line">---</span> Error Vector</div>
+      </div>
+    </section>
+
+    <!-- Right Panel: Benchmark Performance & Charts -->
+    <section class="panel benchmark-panel">
+      <h2>Algorithm Benchmark Comparison</h2>
+      <p class="panel-desc">Evaluated on independent 1,200 test samples across 122 Access Points.</p>
+
+      <table class="benchmark-table">
+        <thead>
+          <tr>
+            <th>Algorithm</th>
+            <th>Mean Error</th>
+            <th>Median</th>
+            <th>Floor Acc</th>
+          </tr>
+        </thead>
+        <tbody id="benchmarkTableBody">
+          <!-- Populated from demo_data.json -->
+        </tbody>
+      </table>
+
+      <div class="insights-card">
+        <h3>Key Academic Takeaways</h3>
+        <ul>
+          <li><strong>PyTorch Multi-Task DNN</strong> achieves the lowest mean error of <strong>4.52m</strong> via joint representation learning.</li>
+          <li><strong>Hierarchical Multi-Stage</strong> guarantees <strong>100% Building & Floor identification</strong> before running fine regression.</li>
+          <li><strong>Weighted k-NN (WKNN)</strong> provides ultra-low latency (<0.1ms per inference) with 4.61m mean error.</li>
+        </ul>
+      </div>
+
+      <div class="chart-preview-card">
+        <h3>CDF Error Comparison</h3>
+        <img src="../outputs/plots/cdf_error_comparison.png" alt="CDF Comparison" class="chart-img">
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
